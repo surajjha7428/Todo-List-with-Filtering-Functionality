@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Template</title>
+</head>
+
+<body>
+    <div id="root"></div>
+</body>
+<script src="https://www.unpkg.com/react@18.2.0/umd/react.development.js"></script>
+<script src="https://www.unpkg.com/react-dom@18.2.0/umd/react-dom.development.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+    // Your  code will go here
+    let root = document.querySelector("#root");
+    function App() {
+        let [todos, setTodos] = React.useState([]);
+        let [newTodo, setNewTodo] = React.useState("");
+        function handleChange(e) {
+            let ab = e.target.value;
+            setNewTodo(ab);
+        }
+        function handleClick(e) {
+            setTodos([...todos, { id: Date.now(), text: newTodo, completed: false }]);
+            setNewTodo("");
+        }
+        function toggleChange(id) {
+            setTodos(todos.map((todo) =>
+                todo.id === id ? { ...todo, completed: !todo.completed } : todo
+            ))
+        }
+        function handleRemove(id) {
+            setTodos(todos.filter((todo) =>
+                todo.id !== id
+            ))
+        }
+        return (
+            <>
+                <input value={newTodo} onChange={handleChange} />
+                <button onClick={handleClick}>Add Todo</button>
+                <ul>
+                    {todos.map((todo, index) => {
+                        return (
+                            <li key={todo.id}>
+                                <input type="checkbox" checked={todo.completed} onChange={() => toggleChange(todo.id)} />
+                                <span>{todo.text}</span>
+                                <button onClick={() => handleRemove(todo.id)}>Remove</button>
+                            </li>
+                        )
+                    })}
+                </ul>
+            </>
+        )
+    }
+    ReactDOM.createRoot(root).render(<App />);
+</script>
+
+</html>
